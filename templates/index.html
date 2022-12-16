@@ -1,3 +1,4 @@
+{% import "macros.html" as macros %}
 {% include "b_header.html" %}
 
 <div class="wrapper">
@@ -40,16 +41,7 @@
                     <button type="submit" class="btn btn-primary" name="action" value="icon_info">Информация</button>
                 </div>
             </div>
-            <div class="right-panel-list grid">
-                {% for aIcon in aIcons %}
-                <div class="blk-item">
-                    <input type="checkbox" name="icons[]" id="icon_{{aIcon[0]}}" value="{{aIcon[0]}}">
-                    <label for="icon_{{aIcon[0]}}">
-                        <i class="bi {{aIcon[2]}}"></i>
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
+            {{ macros.icons_list(aIcons, 2) }}
         </form>
         {% endif %}
     </div>

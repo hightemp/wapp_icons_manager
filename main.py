@@ -5,6 +5,7 @@ import sqlite3
 import glob
 import re
 import base64
+import html
 
 app = Flask(__name__)
 
@@ -85,6 +86,33 @@ def index():
         aSavedGroups=aSavedGroups
     )
 
+@app.route("/export_to_html", methods=['GET', 'POST'])
+def export_to_html():
+    sSelGroup = request.args.get('sSelGroup', '')
+    sSelIcon = request.args.get('sSelIcon', '')
+    sSelSavedGroup = request.args.get('sSelSavedGroup', '')
+    sSelSavedIcon = request.args.get('sSelSavedIcon', '')
+
+    aSavedIcons = query_db('''
+        SELECT * FROM save_icons_to_groups AS si
+        LEFT JOIN icons_to_groups AS ig ON ig.id=si.icons_to_groups_id
+        WHERE si.save_group_id=?
+    ''', (sSelSavedGroup,))
+
+    sHTML = ""
+    for oItem in aSavedIcons:
+        sHTML += '<i class="bi '+oItem[5]+'"></i>'+"\n"
+    # sHTML = html.escape(sHTML)
+
+    return render_template('export_to_html.html',
+        sSelGroup=sSelGroup,
+        sSelIcon=sSelIcon,
+        aSavedIcons=aSavedIcons,
+        sSelSavedGroup=sSelSavedGroup,
+        sSelSavedIcon=sSelSavedIcon,
+        sHTML=sHTML
+    )
+
 @app.route("/groups", methods=['GET', 'POST'])
 def groups():
     sBaseURL = request.url
@@ -135,6 +163,10 @@ def groups():
     if len(aCurGroup)>0 and len(aCurGroup[0])>1:
         sCurGroup = aCurGroup[0][1]
 
+    aExports = [
+        ["/export_to_html?sSelSavedGroup="+str(sSelSavedGroup), "Экспорт в html"]
+    ]
+
     print(aSavedIcons)
 
     return render_template('groups.html', 
@@ -145,5 +177,6 @@ def groups():
         sSelSavedIcon=sSelSavedIcon,
         aSavedGroups=aSavedGroups,
         aSavedIcons=aSavedIcons,
-        sCurGroup=sCurGroup
+        sCurGroup=sCurGroup,
+        aExports=aExports
     )

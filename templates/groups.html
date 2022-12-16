@@ -1,3 +1,4 @@
+{% import "macros.html" as macros %}
 {% include "b_header.html" %}
 
 <div class="wrapper">
@@ -35,19 +36,10 @@
                     <button class="btn btn-success" type="submit" name="action" value="icon_add_group">Добавить группу</button>
                     <button class="btn btn-danger" type="submit" name="action" value="icon_remove_group">Удалить группу</button>
                     <button class="btn btn-danger" type="submit" name="action" value="icon_remove_from_group">Удалить</button>
-                    <button class="btn btn-secondary" type="submit" name="action" value="icon_export">Экспорт</button>
+                    {{ macros.dropdown(aExports, "Экспорт") }}
                 </div>
             </div>
-            <div class="right-panel-list grid">
-                {% for aIcon in aSavedIcons %}
-                <div class="blk-item">
-                    <input type="checkbox" name="icons[]" id="icon_{{aIcon[0]}}" value="{{aIcon[0]}}">
-                    <label for="icon_{{aIcon[0]}}">
-                        <i class="bi {{aIcon[5]}}"></i>
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
+            {{ macros.icons_list(aSavedIcons, 5) }}
         </form>
         {% endif %}
     </div>
