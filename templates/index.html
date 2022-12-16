@@ -1,0 +1,58 @@
+{% include "b_header.html" %}
+
+<div class="wrapper">
+    <div class="left-panel">
+        <div class="btn-group">
+            <a href="/" class="btn btn-success">Иконки</a>
+            <a href="/groups" class="btn btn-secondary">Группы</a>
+        </div>
+        <div class="list-group left-panel-list">
+            {% for oGroup in aGroups %}
+                <div class="input-group tab-row">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" value="" name="tabs[{{oGroup[0]}}]" />
+                    </div>
+                    <a 
+                        class="list-group-item list-group-item-action {{ 'active' if oGroup[0]|string == sSelGroup|string }} " 
+                        href="?sSelGroup={{ oGroup[0] }}"
+                    >
+                        {{ oGroup[1] }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="right-panel">
+        {% if sSelGroup %}
+        <form action="">
+            <input type="hidden" name="sSelGroup" value="{{sSelGroup}}">
+            <input type="hidden" name="sSelIcon" value="{{sSelIcon}}">
+            <input type="hidden" name="sSelSavedGroup" value="{{sSelSavedGroup}}">
+            <input type="hidden" name="sSelSavedIcon" value="{{sSelSavedIcon}}">
+            <div class="actions-panel">
+                <select class="form-select form-select-sm" name="saved-group">
+                    {% for oSavedGroup in aSavedGroups %}
+                    <option value="{{oSavedGroup[0]}}">{{oSavedGroup[1]}}</option>
+                    {% endfor %}
+                </select>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="submit" class="btn btn-success" name="action" value="icon_add_to_group">Добавить в группу</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="icon_info">Информация</button>
+                </div>
+            </div>
+            <div class="right-panel-list grid">
+                {% for aIcon in aIcons %}
+                <div class="blk-item">
+                    <input type="checkbox" name="icons[]" id="icon_{{aIcon[0]}}" value="{{aIcon[0]}}">
+                    <label for="icon_{{aIcon[0]}}">
+                        <i class="bi {{aIcon[2]}}"></i>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+{% include "b_footer.html" %}
